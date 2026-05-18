@@ -10,7 +10,6 @@
     "serve": "node backend/server.js",
     "serve:dev": "nodemon backend/server.js",
     "preview": "vite preview"
-
   },
   "dependencies": {
     "react": "^19.2.6",
