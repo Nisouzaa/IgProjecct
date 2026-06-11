@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
-import useResource from './useResource';
 import visitorsService from '../services/visitorsService';
 import { MOCK_VISITORS } from '../constants';
+import useResource from './useResource';  
 
 /**
  * Hook para gerenciar visitantes.

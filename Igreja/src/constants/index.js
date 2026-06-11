@@ -54,7 +54,7 @@ export const VISITOR_DEFAULTS = {
 };
 
 // // ─── Mock data (usado quando o backend está offline) ──────────────────────
-export const MOCK_EVENTS = []
+export const MOCK_EVENTS = [];
 //   {
 //     id: '1',
 //     title: 'Culto de Domingo',
@@ -105,7 +105,7 @@ export const MOCK_EVENTS = []
 //   },
 // ];
 
-export const MOCK_VISITORS = []
+export const MOCK_VISITORS = [];
 //   {
 //     id: '',
 //     name: '',

@@ -14,7 +14,7 @@ const useEvents = () => {
   const service = useMemo(() => eventsService, []);
 
   const {
-    items: events,
+    items: events = [],
     loading,
     backendOnline,
     addItem: addEvent,

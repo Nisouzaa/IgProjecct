@@ -8,7 +8,7 @@ import { UsersIcon, MailIcon, CalendarIcon } from '../components/ui/Icons';
 /**
  * Página de Dashboard — visão geral da semana/mês.
  */
-const DashboardPage = ({ events, visitors, onNavigate }) => {
+const DashboardPage = ({ events = [], visitors = [], onNavigate }) => {
   const today = new Date();
 
   const thisMonth = visitors.filter((v) => {

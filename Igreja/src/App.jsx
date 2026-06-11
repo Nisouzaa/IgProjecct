@@ -21,13 +21,13 @@ function App() {
   const [activePage, setActivePage] = useState("dashboard");
 
   const {
-    events,
+    events = [],
     backendOnline: eventsOnline,
     addEvent,
     editEvent,
     removeEvent,
   } = useEvents();
-  const { visitors, addVisitor, editVisitor, removeVisitor } = useVisitors();
+  const { visitors = [], addVisitor, editVisitor, removeVisitor } = useVisitors();
   const { toasts, addToast } = useToast();
 
   const backendOnline = eventsOnline;
