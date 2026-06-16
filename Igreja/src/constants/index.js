@@ -1,123 +1,139 @@
-import { create } from 'zustand'
-import { format } from 'date-fns'
+// ─── Labels de categoria de evento ────────────────────────────────────────
+export const CAT_LABELS = {
+  culto: 'Culto',
+  aula: 'Aula / EBD',
+  evento: 'Evento',
+  outro: 'Outro',
+};
 
-const TODAY = new Date()
+// ─── Labels de como o visitante encontrou a igreja ─────────────────────────
+export const HOW_LABELS = {
+  amigo: 'Indicação de amigo',
+  redes_sociais: 'Redes sociais',
+  passando_pela_frente: 'Passando pela frente',
+  convite: 'Convite impresso',
+  outro: 'Outro',
+};
 
-export const useStore = create((set, get) => ({
-  // UI state
-  currentPage:      'dashboard',
-  darkMode:         false,
-  selectedDate:     TODAY,
-  modalOpen:        null,
-  toast:            null,
-  sidebarCollapsed: false,
+// ─── Labels de status de acompanhamento ───────────────────────────────────
+export const FOLLOW_LABELS = {
+  pendente: 'Pendente',
+  contatado: 'Contatado',
+  membro: 'Tornou-se membro',
+};
 
-  // Data — empty by default, populated by user actions
-  events:     [],
-  volunteers: [],
-  counseling: [],
-  members:    [],
-  rooms: [
-    { id: 1, name: 'Sala Principal',  capacity: 300, type: 'Auditório',      status: 'available', until: null, color: '#7C3AED' },
-    { id: 2, name: 'Sala 2',          capacity: 30,  type: 'Reuniões',       status: 'available', until: null, color: '#0891B2' },
-    { id: 3, name: 'Auditório',       capacity: 150, type: 'Eventos',        status: 'available', until: null, color: '#059669' },
-    { id: 4, name: 'Sala de Oração',  capacity: 20,  type: 'Oração',         status: 'available', until: null, color: '#D97706' },
-    { id: 5, name: 'Sala Infantil',   capacity: 40,  type: 'Escola Bíblica', status: 'available', until: null, color: '#E11D48' },
-    { id: 6, name: 'Sala de Mídia',   capacity: 8,   type: 'Produção',       status: 'available', until: null, color: '#7C3AED' },
-  ],
+// ─── Dias da semana e meses em PT-BR ──────────────────────────────────────
+export const DAYS_OF_WEEK = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
 
-  // UI actions
-  setPage:         (page) => set({ currentPage: page }),
-  toggleDark:      () => set((s) => ({ darkMode: !s.darkMode })),
-  setSelectedDate: (date) => set({ selectedDate: date }),
-  openModal:       (name) => set({ modalOpen: name }),
-  closeModal:      () => set({ modalOpen: null }),
-  toggleSidebar:   () => set((s) => ({ sidebarCollapsed: !s.sidebarCollapsed })),
+export const MONTHS = [
+  'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
+  'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro',
+];
 
-  showToast: (msg, type = 'success') => {
-    set({ toast: { msg, type, id: Date.now() } })
-    setTimeout(() => set({ toast: null }), 3000)
-  },
+// ─── Valores padrão dos formulários ───────────────────────────────────────
+export const EVENT_DEFAULTS = {
+  title: '',
+  description: '',
+  date: '',
+  time: '',
+  endTime: '',
+  category: 'culto',
+  location: '',
+  recurring: false,
+  recurrence: 'weekly',
+};
 
-  // Event actions
-  addEvent: (ev) =>
-    set((s) => ({
-      events: [
-        ...s.events,
-        { ...ev, id: Date.now(), confirmed: 0, color: '#7C3AED' },
-      ],
-    })),
+export const VISITOR_DEFAULTS = {
+  name: '',
+  email: '',
+  phone: '',
+  visitDate: new Date().toISOString().split('T')[0],
+  howFoundUs: 'amigo',
+  observations: '',
+  followUpStatus: 'pendente',
+};
 
-  confirmPresence: (id) =>
-    set((s) => ({
-      events: s.events.map((e) =>
-        e.id === id ? { ...e, confirmed: e.confirmed + 1 } : e
-      ),
-    })),
+// // ─── Mock data (usado quando o backend está offline) ──────────────────────
+export const MOCK_EVENTS = [];
+//   {
+//     id: '1',
+//     title: 'Culto de Domingo',
+//     date: new Date().toISOString().split('T')[0],
+//     time: '10:00',
+//     endTime: '12:00',
+//     category: 'culto',
+//     location: 'Templo Principal',
+//     description: 'Culto principal com louvor e pregação',
+//     recurring: true,
+//     recurrence: 'weekly',
+//   },
+//   {
+//     id: '2',
+//     title: 'Escola Bíblica',
+//     date: new Date(Date.now() + 2 * 86400000).toISOString().split('T')[0],
+//     time: '09:00',
+//     endTime: '10:30',
+//     category: 'aula',
+//     location: 'Sala 01',
+//     description: 'Estudo das escrituras',
+//     recurring: true,
+//     recurrence: 'weekly',
+//   },
+//   {
+//     id: '3',
+//     title: 'Reunião de Jovens',
+//     date: new Date(Date.now() + 4 * 86400000).toISOString().split('T')[0],
+//     time: '19:00',
+//     endTime: '21:00',
+//     category: 'evento',
+//     location: 'Salão Social',
+//     description: 'Encontro semanal dos jovens',
+//     recurring: true,
+//     recurrence: 'weekly',
+//   },
+//   {
+//     id: '4',
+//     title: 'Culto de Quarta',
+//     date: new Date(Date.now() + 3 * 86400000).toISOString().split('T')[0],
+//     time: '19:30',
+//     endTime: '21:00',
+//     category: 'culto',
+//     location: 'Templo Principal',
+//     description: 'Culto de oração e intercessão',
+//     recurring: true,
+//     recurrence: 'weekly',
+//   },
+// ];
 
-  // Counseling actions
-  addCounseling: (c) =>
-    set((s) => ({
-      counseling: [
-        ...s.counseling,
-        { ...c, id: Date.now(), status: 'pending', color: '#7C3AED' },
-      ],
-    })),
-
-  updateCounseling: (id, status) =>
-    set((s) => ({
-      counseling: s.counseling.map((c) =>
-        c.id === id ? { ...c, status } : c
-      ),
-    })),
-
-  // Volunteer actions
-  addVolunteer: (v) =>
-    set((s) => ({
-      volunteers: [
-        ...s.volunteers,
-        { ...v, id: Date.now(), status: 'pending', color: '#7C3AED' },
-      ],
-    })),
-
-  updateVolunteer: (id, status) =>
-    set((s) => ({
-      volunteers: s.volunteers.map((v) =>
-        v.id === id ? { ...v, status } : v
-      ),
-    })),
-
-  // Member actions
-  addMember: (m) =>
-    set((s) => ({
-      members: [
-        ...s.members,
-        { ...m, id: Date.now(), status: 'new', color: '#7C3AED' },
-      ],
-    })),
-
-  // Room actions
-  updateRoom: (id, changes) =>
-    set((s) => ({
-      rooms: s.rooms.map((r) =>
-        r.id === id ? { ...r, ...changes } : r
-      ),
-    })),
-
-  // Selectors
-  getUpcoming: (n = 6) => {
-    const todayStr = format(TODAY, 'yyyy-MM-dd')
-    return get()
-      .events.filter((e) => e.date >= todayStr)
-      .sort(
-        (a, b) =>
-          a.date.localeCompare(b.date) || a.time.localeCompare(b.time)
-      )
-      .slice(0, n)
-  },
-
-  getByDate: (date) =>
-    get().events.filter((e) => e.date === format(date, 'yyyy-MM-dd')),
-
-  getDatesWithEvents: () => new Set(get().events.map((e) => e.date)),
-}))
+export const MOCK_VISITORS = [];
+//   {
+//     id: '',
+//     name: '',
+//     email: '',
+//     phone: '',
+//     visitDate: new Date(Date.now() - 7 * 86400000).toISOString().split('T')[0],
+//     howFoundUs: '',
+//     observations: '',
+//     followUpStatus: '',
+//   },
+//   {
+//     id: '',
+//     name: '',
+//     email: '',
+//     phone: '',
+//     visitDate: new Date(Date.now() - 14 * 86400000).toISOString().split('T')[0],
+//     howFoundUs: '',
+//     observations: '',
+//     followUpStatus: '',
+//   },
+//   {
+//     id: '',
+//     name: '',
+//     email: '',
+//     phone: '',
+//     visitDate: new Date().toISOString().split('T')[0],
+//     howFoundUs: '',
+//     observations: '',
+//     followUpStatus: '',
+//   },
+// ];
